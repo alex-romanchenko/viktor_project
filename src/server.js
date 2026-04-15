@@ -44,7 +44,9 @@ app.use((req, res, next) => {
   res.locals.user = req.session.user || null;
   next();
 });
-
+app.get('/health', (req, res) => {
+  res.status(200).send('ok');
+});
 app.use('/', publicRoutes);
 app.use('/admin', adminRoutes);
 
