@@ -6,6 +6,7 @@ const musicController = require('../controllers/music.controller');
 const mediaController = require('../controllers/media.controller');
 const eventController = require('../controllers/event.controller');
 const homeController = require('../controllers/home.controller');
+console.log('homeController =', homeController);
 const contactController = require('../controllers/contact.controller');
 // redirect root
 router.get('/', (req, res) => {
