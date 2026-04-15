@@ -1,0 +1,55 @@
+name: Deploy to hosting
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+concurrency:
+  group: production-deploy
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      # якщо у тебе будуть тести:
+      # - name: Run tests
+      #   run: npm test
+
+      - name: Setup SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -p ${{ secrets.PORT }} ${{ secrets.HOST }} >> ~/.ssh/known_hosts
+
+      - name: Deploy on server
+        run: |
+          ssh -p ${{ secrets.PORT }} ${{ secrets.USERNAME }}@${{ secrets.HOST }} << 'EOF'
+            set -e
+            cd ${{ secrets.PROJECT_PATH }}
+            git pull origin main
+            npm ci --omit=dev
+
+            # Якщо використовуєш Passenger/cPanel Node.js App:
+            mkdir -p tmp
+            touch tmp/restart.txt
+
+            # Якщо є міграції:
+            # npm run migrate
+          EOF
