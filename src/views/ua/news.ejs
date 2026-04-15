@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Новини — Віктор Романченко</title>
+  <meta name="description" content="Новини, прем’єри, виступи та оновлення." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="/assets/style.css" />
+  <link rel="stylesheet" href="/assets/pages.css" />
+</head>
+<body>
+  <header class="site-header" id="top">
+    <div class="container header-inner">
+      <a class="brand" href="/ua" aria-label="На головну">
+        <span class="brand-logo">
+          <img src="/images/logo.png" alt="Viktor Romanchenko logo" />
+        </span>
+        <span class="brand-name">Віктор Романченко</span>
+      </a>
+
+      <button class="burger" id="burger" aria-label="Відкрити меню" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+
+      <nav class="nav" id="nav" aria-label="Головне меню">
+        <a class="is-active" href="/ua/news">Новини</a>
+        <a href="/ua/bio">Біографія</a>
+        <a href="/ua/music">Музика</a>
+        <a href="/ua/media">Медіа</a>
+        <a href="/ua/tour">Афіша</a>
+        <a href="/ua/contacts">Контакти</a>
+      </nav>
+
+      <div class="lang">
+        <a class="lang-link is-active" href="/ua/news">UA</a>
+        <span class="lang-sep">|</span>
+        <a class="lang-link" href="/en/news">EN</a>
+      </div>
+    </div>
+  </header>
+
+  <section class="section section-soft">
+    <div class="container">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">Оновлення</p>
+          <h1>Новини</h1>
+        </div>
+        <a class="back-link" href="/ua">← На головну</a>
+      </div>
+
+      <% if (!news.length) { %>
+        <div class="empty-state">
+          Новин поки що немає.
+        </div>
+      <% } %>
+
+      <div class="news-list">
+        <% news.forEach(item => { %>
+          <article class="news-item-card">
+            <a class="news-item-cover" href="/ua/news/<%= item.slug %>">
+              <img
+                src="<%= item.image || '/images/news-placeholder.jpg' %>"
+                alt="<%= item.title %>"
+              />
+            </a>
+
+            <div class="news-item-body">
+              <div class="news-item-meta">
+                <span>
+                  <%= new Date(item.created_at).toLocaleDateString('uk-UA', {
+                    day: '2-digit',
+                    month: 'long',
+                    year: 'numeric'
+                  }) %>
+                </span>
+              </div>
+
+              <h2 class="news-item-title">
+                <a href="/ua/news/<%= item.slug %>"><%= item.title %></a>
+              </h2>
+
+              <p class="news-item-excerpt">
+                <%= item.excerpt || 'Без короткого опису.' %>
+              </p>
+
+              <a class="news-item-btn" href="/ua/news/<%= item.slug %>">Читати</a>
+            </div>
+          </article>
+        <% }) %>
+      </div>
+    </div>
+  </section>
+    <button class="scroll-top" id="scrollTopBtn" type="button" aria-label="Вгору">
+      ↑
+    </button>
+  <script src="/assets/script.js"></script>
+</body>
+</html>

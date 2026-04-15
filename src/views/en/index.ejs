@@ -1,0 +1,325 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Viktor Romanchenko — Official Website</title>
+  <meta name="description" content="Official website of singer Viktor Romanchenko: news, music, media, tour, contacts." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="/assets/style.css" />
+  <link rel="stylesheet" href="/assets/pages.css" />
+</head>
+
+<body>
+  <header class="site-header" id="top">
+    <div class="container header-inner">
+      <a class="brand" href="/en" aria-label="Home">
+        <span class="brand-logo">
+          <img src="/images/logo.png" alt="Viktor Romanchenko logo" />
+        </span>
+        <span class="brand-name">Viktor Romanchenko</span>
+      </a>
+
+      <button class="burger" id="burger" aria-label="Open menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+
+      <nav class="nav" id="nav" aria-label="Main menu">
+        <a href="/en/news">News</a>
+        <a href="/en/bio">Biography</a>
+        <a href="/en/music">Music</a>
+        <a href="/en/media">Media</a>
+        <a href="/en/tour">Tour</a>
+        <a href="/en/contacts">Contacts</a>
+      </nav>
+
+      <div class="lang">
+        <a class="lang-link" href="/ua/">UA</a>
+        <span class="lang-sep">|</span>
+        <a class="lang-link is-active" href="/en/">EN</a>
+      </div>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="hero-bg" style="background-image:url('/images/hero.jpg');"></div>
+    <div class="hero-overlay"></div>
+
+    <div class="container hero-inner">
+      <div class="hero-left">
+        <div class="hero-links">
+          <a href="https://www.youtube.com/@_Fizruk_" aria-label="YouTube" class="chip" target="_blank" rel="noopener">YouTube</a>
+          <a href="https://www.instagram.com/_viktorromanchenko_/" aria-label="Instagram" class="chip" target="_blank" rel="noopener">Instagram</a>
+          <a href="https://www.tiktok.com/@viktorromanchenko_fizruk?_r=1" aria-label="TikTok" class="chip" target="_blank" rel="noopener">TikTok</a>
+          <a href="https://open.spotify.com/artist/7yMrPREhiFUIEXvvA463yT" aria-label="Spotify" class="chip" target="_blank" rel="noopener">Spotify</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="news">
+    <div class="container">
+      <div class="section-head">
+        <h2>Latest News</h2>
+        <a class="text-link" href="/en/news">All news →</a>
+      </div>
+
+      <% if (!latestNews || latestNews.length === 0) { %>
+        <div class="empty-state">No news yet.</div>
+      <% } %>
+
+      <% if (latestNews && latestNews.length > 0) { %>
+        <div class="grid grid-3">
+          <% latestNews.forEach(function(item) { %>
+            <% const imageUrl = item.image ? item.image : '/images/news-1.jpg'; %>
+
+            <article class="card">
+              <div class="card-media" style="background-image:url('<%= imageUrl %>');"></div>
+              <div class="card-body">
+                <% if (item.created_at) { %>
+                  <p class="meta"><%= new Date(item.created_at).toLocaleDateString('en-GB') %></p>
+                <% } %>
+                <h3><%= item.title %></h3>
+                <p class="muted"><%= item.excerpt || 'Site news' %></p>
+                <a class="btn btn-small btn-ghost" href="/en/news/<%= item.slug %>">Read more</a>
+              </div>
+            </article>
+          <% }) %>
+        </div>
+      <% } %>
+    </div>
+  </section>
+
+  <section class="section section-dark" id="bio">
+    <div class="container bio">
+      <div class="bio-photo" style="background-image:url('/images/bio.jpg');"></div>
+
+      <div class="bio-text">
+        <p class="kicker">About Viktor</p>
+        <h2>Biography</h2>
+        <p class="muted">
+          Viktor Romanchenko is a singer and performer of original songs. A short overview:
+          style, character, stage presence, and key milestones.
+        </p>
+
+        <ul class="bullets">
+          <li>Participant in major music projects</li>
+          <li>Live shows and concerts</li>
+          <li>Track and video premieres</li>
+        </ul>
+
+        <a class="btn btn-primary" href="/en/bio">Read full biography</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="music">
+    <div class="container">
+      <div class="section-head">
+        <h2>Music</h2>
+        <a class="text-link" href="/en/music">All music →</a>
+      </div>
+
+      <% if (!latestTracks || latestTracks.length === 0) { %>
+        <div class="empty-state">No tracks yet.</div>
+      <% } %>
+
+      <% if (latestTracks && latestTracks.length > 0) { %>
+        <div class="grid grid-2">
+          <div class="panel">
+            <h3>Latest tracks</h3>
+
+            <% latestTracks.forEach(function(track) { %>
+              <% const coverUrl = track.cover_image ? '/uploads/covers/' + track.cover_image : '/images/cover-1.jpg'; %>
+
+              <div class="track">
+                <div class="track-left">
+                  <div class="track-cover" style="background-image:url('<%= coverUrl %>');"></div>
+                  <div>
+                    <div class="track-title"><%= track.title %></div>
+                    <div class="muted"><%= track.description || 'Track' %></div>
+                  </div>
+                </div>
+                <div class="track-actions">
+                  <a class="btn btn-small btn-ghost" href="/en/music">Listen</a>
+                </div>
+              </div>
+            <% }) %>
+          </div>
+
+          <div class="panel">
+            <h3>Player</h3>
+
+            <% if (latestTracks[0]) { %>
+              <div class="embed">
+                <audio controls style="width:100%;">
+                  <source src="/uploads/music/<%= latestTracks[0].audio %>" type="audio/mpeg">
+                </audio>
+              </div>
+            <% } %>
+
+            <div class="row">
+              <a class="btn btn-small btn-primary" href="https://open.spotify.com/artist/7yMrPREhiFUIEXvvA463yT" target="_blank" rel="noopener">Spotify</a>
+              <a class="btn btn-small btn-ghost" href="/en/music">All music</a>
+            </div>
+          </div>
+        </div>
+      <% } %>
+    </div>
+  </section>
+
+  <section class="section section-soft" id="media">
+    <div class="container">
+      <div class="section-head">
+        <h2>Media</h2>
+        <a class="text-link" href="/en/media">All media →</a>
+      </div>
+
+      <% if (!latestMedia || latestMedia.length === 0) { %>
+        <div class="empty-state">No media yet.</div>
+      <% } %>
+
+      <% if (latestMedia && latestMedia.length > 0) { %>
+        <div class="grid grid-3">
+          <% latestMedia.forEach(function(item) { %>
+            <article class="media-card" style="cursor:default;">
+              <% if (item.embedUrl) { %>
+                <div class="media-video">
+                  <iframe
+                    src="<%= item.embedUrl %>"
+                    title="<%= item.title %>"
+                    frameborder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    referrerpolicy="strict-origin-when-cross-origin"
+                    allowfullscreen
+                  ></iframe>
+                </div>
+              <% } else { %>
+                <% const mediaCover = item.cover_image ? '/uploads/media/' + item.cover_image : '/images/video-1.jpg'; %>
+                <div class="media-thumb" style="background-image:url('<%= mediaCover %>');"></div>
+              <% } %>
+
+              <div class="media-body">
+                <div class="media-title"><%= item.title %></div>
+                <div class="muted"><%= item.description || 'Video' %></div>
+              </div>
+            </article>
+          <% }) %>
+        </div>
+      <% } %>
+    </div>
+  </section>
+
+  <section class="section" id="tour">
+    <div class="container">
+      <div class="section-head">
+        <h2>Tour</h2>
+        <a class="text-link" href="/en/tour">Full tour →</a>
+      </div>
+
+      <% if (!latestEvents || latestEvents.length === 0) { %>
+        <div class="empty-state">No events yet.</div>
+      <% } %>
+
+      <% if (latestEvents && latestEvents.length > 0) { %>
+        <div class="panel">
+          <% latestEvents.forEach(function(event) { %>
+            <% const eventDate = new Date(event.date); %>
+            <div class="event">
+              <div class="event-date">
+                <div class="day"><%= eventDate.getDate().toString().padStart(2, '0') %></div>
+                <div class="mon"><%= eventDate.toLocaleString('en-GB', { month: 'short' }).toUpperCase() %></div>
+              </div>
+              <div class="event-info">
+                <div class="event-title"><%= event.title %></div>
+                <div class="muted">
+                  <%= event.time || '' %>
+                  <% if (event.city) { %> • <%= event.city %><% } %>
+                  <% if (event.place) { %> • <%= event.place %><% } %>
+                </div>
+              </div>
+              <div class="event-actions">
+                <% if (event.ticket_link) { %>
+                  <a class="btn btn-small btn-primary" href="<%= event.ticket_link %>" target="_blank" rel="noopener">Tickets</a>
+                <% } else { %>
+                  <a class="btn btn-small btn-ghost" href="/en/tour">Details</a>
+                <% } %>
+              </div>
+            </div>
+          <% }) %>
+        </div>
+      <% } %>
+    </div>
+  </section>
+
+  <section class="section section-dark" id="contacts">
+    <div class="container contacts">
+      <div>
+        <h2>Contacts</h2>
+        <p class="muted">For bookings, concerts and media requests.</p>
+
+        <div class="contact-list">
+          <div class="contact-item">
+            <span class="label">Booking</span>
+            <a href="tel:<%= contacts.phone %>"><%= contacts.phone %></a>
+          </div>
+
+          <div class="contact-item">
+            <span class="label">Email</span>
+            <a href="mailto:<%= contacts.email %>"><%= contacts.email %></a>
+          </div>
+
+          <div class="contact-item">
+            <span class="label">Social media</span>
+            <div class="row">
+              <a class="chip" href="https://www.instagram.com/_viktorromanchenko_/" target="_blank" rel="noopener">Instagram</a>
+              <a class="chip" href="https://www.youtube.com/@_Fizruk_" target="_blank" rel="noopener">YouTube</a>
+              <a class="chip" href="https://www.tiktok.com/@viktorromanchenko_fizruk?_r=1" target="_blank" rel="noopener">TikTok</a>
+              <a class="chip" href="https://open.spotify.com/artist/7yMrPREhiFUIEXvvA463yT" target="_blank" rel="noopener">Spotify</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <form class="form" action="#" method="post">
+        <h3>Send a message</h3>
+        <div class="grid grid-2">
+          <label>
+            Name
+            <input type="text" name="name" placeholder="Your name" required>
+          </label>
+
+          <label>
+            Email
+            <input type="email" name="email" placeholder="name@email.com" required>
+          </label>
+        </div>
+
+        <label>
+          Message
+          <textarea name="message" rows="5" placeholder="Write your message here..." required></textarea>
+        </label>
+
+        <button class="btn btn-primary" type="submit">Send</button>
+        <p class="muted small">*The form is currently a demo. Submission can be connected later.</p>
+      </form>
+    </div>
+
+    <footer class="footer">
+      <div class="container footer-inner">
+        <span>© <span id="year"></span> Viktor Romanchenko</span>
+      </div>
+    </footer>
+  </section>
+
+  <button class="scroll-top" id="scrollTopBtn" type="button" aria-label="Back to top">
+    ↑
+  </button>
+
+  <script src="/assets/script.js"></script>
+</body>
+</html>

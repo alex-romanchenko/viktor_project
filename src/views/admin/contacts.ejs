@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Контакти</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/assets/admin.css" />
+</head>
+<body class="admin-body">
+  <div class="admin-shell">
+    <div class="admin-topbar">
+      <div>
+        <div class="admin-brand">Admin <span>Panel</span></div>
+        <div class="admin-user">Контакти</div>
+      </div>
+
+      <form method="POST" action="/admin/logout">
+        <button class="btn btn-secondary" type="submit">Вийти</button>
+      </form>
+    </div>
+
+    <div class="admin-grid">
+      <aside class="admin-sidebar">
+        <nav class="admin-nav">
+          <a href="/admin">Головна</a>
+          <a href="/admin/news">Новини</a>
+          <a href="/admin/music">Музика</a>
+          <a href="/admin/media">Медіа</a>
+          <a href="/admin/events">Афіша</a>
+          <a class="is-active" href="/admin/contacts">Контакти</a>
+          <a href="/ua" target="_blank">Відкрити сайт</a>
+        </nav>
+      </aside>
+
+      <main class="admin-panel">
+        <h1 class="admin-title">Контакти</h1>
+        <p class="admin-subtitle">Тут можна змінити телефон і email на сайті.</p>
+
+        <% if (error) { %>
+          <div class="admin-error"><%= error %></div>
+        <% } %>
+
+        <form class="admin-form" method="POST" action="/admin/contacts">
+          <div class="admin-field">
+            <label for="phone">Телефон</label>
+            <input id="phone" type="text" name="phone" value="<%= contacts ? contacts.phone : '' %>" />
+          </div>
+
+          <div class="admin-field">
+            <label for="email">Email</label>
+            <input id="email" type="text" name="email" value="<%= contacts ? contacts.email : '' %>" />
+          </div>
+
+          <div class="admin-actions">
+            <button class="btn btn-primary" type="submit">Зберегти</button>
+          </div>
+        </form>
+      </main>
+    </div>
+  </div>
+</body>
+</html>

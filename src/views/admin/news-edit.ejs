@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Редагувати новину</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/assets/admin.css" />
+</head>
+<body class="admin-body">
+  <div class="admin-shell">
+    <div class="admin-topbar">
+      <div>
+        <div class="admin-brand">Admin <span>Panel</span></div>
+        <div class="admin-user">Редагування новини</div>
+      </div>
+
+      <form method="POST" action="/admin/logout">
+        <button class="btn btn-secondary" type="submit">Вийти</button>
+      </form>
+    </div>
+
+    <div class="admin-grid">
+      <aside class="admin-sidebar">
+        <nav class="admin-nav">
+          <a class="is-active" href="/admin">Головна</a>
+          <a href="/admin/news">Новини</a>
+          <a href="/admin/music">Музика</a>
+          <a href="/admin/media">Медіа</a>
+          <a href="/admin/events">Афіша</a>
+          <a href="/ua" target="_blank">Відкрити сайт</a>
+      </aside>
+
+      <main class="admin-panel">
+        <h1 class="admin-title">Редагувати новину</h1>
+        <p class="admin-subtitle">Онови потрібні поля.</p>
+
+        <% if (error) { %>
+          <div class="admin-error"><%= error %></div>
+        <% } %>
+
+        <form class="admin-form" method="POST" action="/admin/news/edit/<%= article.id %>" enctype="multipart/form-data">
+          <div class="admin-field">
+            <label for="title">Title</label>
+            <input id="title" type="text" name="title" value="<%= article.title %>" />
+          </div>
+
+          <div class="admin-field">
+            <label for="slug">Slug</label>
+            <input id="slug" type="text" name="slug" value="<%= article.slug %>" />
+          </div>
+
+          <div class="admin-field">
+            <label for="excerpt">Excerpt</label>
+            <textarea id="excerpt" name="excerpt" rows="4"><%= article.excerpt || '' %></textarea>
+          </div>
+
+          <div class="admin-field">
+            <label for="content">Content</label>
+            <textarea id="content" name="content" rows="10"><%= article.content %></textarea>
+          </div>
+
+          <div class="admin-field">
+            <label for="locale">Мова сторінки</label>
+            <select id="locale" name="locale">
+              <option value="ua" <%= article.locale === 'ua' ? 'selected' : '' %>>Українська</option>
+              <option value="en" <%= article.locale === 'en' ? 'selected' : '' %>>English</option>
+            </select>
+          </div>
+
+              <div class="admin-field">
+                <label for="image">Image path</label>
+                <input id="image" type="text" name="image" value="<%= article.image || '' %>" />
+              </div>
+
+              <div class="admin-field">
+                <label for="imageFile">Або завантажити новий файл</label>
+                <input id="imageFile" type="file" name="imageFile" accept=".jpg,.jpeg,.png,.webp" />
+              </div>
+
+          <div class="admin-actions">
+            <button class="btn btn-primary" type="submit">Оновити</button>
+            <a class="btn btn-secondary" href="/admin/news">Назад</a>
+          </div>
+        </form>
+      </main>
+    </div>
+  </div>
+</body>
+</html>

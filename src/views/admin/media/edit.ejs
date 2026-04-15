@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Редагувати відео</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/assets/admin.css" />
+</head>
+<body class="admin-body">
+  <div class="admin-shell">
+    <div class="admin-topbar">
+      <div>
+        <div class="admin-brand">Admin <span>Panel</span></div>
+        <div class="admin-user">Редагування відео</div>
+      </div>
+
+      <form method="POST" action="/admin/logout">
+        <button class="btn btn-secondary" type="submit">Вийти</button>
+      </form>
+    </div>
+
+    <div class="admin-grid">
+      <aside class="admin-sidebar">
+        <nav class="admin-nav">
+          <a href="/admin">Головна</a>
+          <a href="/admin/news">Новини</a>
+          <a href="/admin/music">Музика</a>
+          <a class="is-active" href="/admin/media">Медіа</a>
+          <a href="/admin/events">Афіша</a>
+          <a href="/ua" target="_blank">Відкрити сайт</a>
+        </nav>
+      </aside>
+
+      <main class="admin-panel">
+        <h1 class="admin-title">Редагувати відео</h1>
+        <p class="admin-subtitle">Онови текст, посилання або обкладинку.</p>
+
+        <form class="admin-form" method="POST" action="/admin/media/edit/<%= media.id %>" enctype="multipart/form-data">
+          <div class="admin-field">
+            <label for="title">Назва</label>
+            <input id="title" type="text" name="title" value="<%= media.title %>" required />
+          </div>
+
+          <div class="admin-field">
+            <label for="description">Опис</label>
+            <textarea id="description" name="description" rows="6"><%= media.description || '' %></textarea>
+          </div>
+
+          <div class="admin-field">
+            <label for="youtube_url">YouTube URL</label>
+            <input id="youtube_url" type="text" name="youtube_url" value="<%= media.youtube_url %>" required />
+          </div>
+
+          <div class="admin-field">
+            <label for="category">Категорія</label>
+            <select id="category" name="category">
+              <option value="clips" <%= media.category === 'clips' ? 'selected' : '' %>>Кліпи</option>
+              <option value="x-factor" <%= media.category === 'x-factor' ? 'selected' : '' %>>Х-Фактор</option>
+              <option value="rock" <%= media.category === 'rock' ? 'selected' : '' %>>Rock Symphony</option>
+              <option value="stories" <%= media.category === 'stories' ? 'selected' : '' %>>Сюжети</option>
+            </select>
+          </div>
+
+          <div class="admin-preview-grid">
+            <div class="admin-preview-card">
+              <div class="admin-preview-label">Поточна обкладинка</div>
+
+              <% if (media.cover_image) { %>
+                <img class="admin-preview-image" src="/uploads/media/<%= media.cover_image %>" alt="<%= media.title %>">
+              <% } else { %>
+                <div class="admin-preview-empty">Обкладинка відсутня</div>
+              <% } %>
+            </div>
+
+            <div class="admin-preview-card">
+              <div class="admin-preview-label">Поточне відео</div>
+
+              <a
+                class="btn btn-secondary"
+                href="<%= media.youtube_url %>"
+                target="_blank"
+                rel="noopener"
+              >
+                Відкрити YouTube
+              </a>
+
+              <div class="admin-file-note"><%= media.youtube_url %></div>
+            </div>
+          </div>
+
+          <div class="admin-field">
+            <label for="cover_image">Нова обкладинка</label>
+            <input id="cover_image" type="file" name="cover_image" accept=".jpg,.jpeg,.png,.webp" />
+          </div>
+
+          <div class="admin-actions">
+            <button class="btn btn-primary" type="submit">Оновити</button>
+            <a class="btn btn-secondary" href="/admin/media">Скасувати</a>
+          </div>
+        </form>
+      </main>
+    </div>
+  </div>
+</body>
+</html>

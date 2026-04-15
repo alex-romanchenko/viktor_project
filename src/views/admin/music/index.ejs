@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Музика</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/assets/admin.css" />
+</head>
+<body class="admin-body">
+  <div class="admin-shell">
+    <div class="admin-topbar">
+      <div>
+        <div class="admin-brand">Admin <span>Panel</span></div>
+        <div class="admin-user">Керування музикою</div>
+      </div>
+
+      <form method="POST" action="/admin/logout">
+        <button class="btn btn-secondary" type="submit">Вийти</button>
+      </form>
+    </div>
+
+    <div class="admin-grid">
+      <aside class="admin-sidebar">
+        <nav class="admin-nav">
+          <a href="/admin">Головна</a>
+          <a href="/admin/news">Новини</a>
+          <a class="is-active" href="/admin/music">Музика</a>
+          <a href="/admin/media">Медіа</a>
+          <a href="/admin/events">Афіша</a>
+          <a href="/ua" target="_blank">Відкрити сайт</a>
+        </nav>
+      </aside>
+
+      <main class="admin-panel">
+        <h1 class="admin-title">Музика</h1>
+        <p class="admin-subtitle">Тут можна додавати, редагувати та видаляти треки.</p>
+
+        <div class="admin-actions">
+          <a class="btn btn-primary" href="/admin/music/create">Додати трек</a>
+          <a class="btn btn-secondary" href="/admin">Назад</a>
+        </div>
+
+        <% if (!musicList || musicList.length === 0) { %>
+          <div class="admin-empty">Поки що жодного треку не додано.</div>
+        <% } %>
+
+        <% if (musicList && musicList.length > 0) { %>
+          <div class="music-admin-list">
+            <% musicList.forEach(function(track) { %>
+              <article class="music-admin-card">
+                <div class="music-admin-main">
+                  <% if (track.cover_image) { %>
+                    <div class="music-admin-cover">
+                      <img src="/uploads/covers/<%= track.cover_image %>" alt="<%= track.title %>">
+                    </div>
+                  <% } else { %>
+                    <div class="music-admin-cover music-admin-cover--empty">
+                      <span>No cover</span>
+                    </div>
+                  <% } %>
+
+                  <div class="music-admin-content">
+                    <h3><%= track.title %></h3>
+
+                    <div class="music-admin-meta">
+                      <span>ID: <%= track.id %></span>
+                      <% if (track.created_at) { %>
+                        <span>Створено: <%= new Date(track.created_at).toLocaleDateString('uk-UA') %></span>
+                      <% } %>
+                    </div>
+
+                    <% if (track.description) { %>
+                      <p><%= track.description %></p>
+                    <% } else { %>
+                      <p class="music-admin-muted">Опис відсутній.</p>
+                    <% } %>
+
+                    <% if (track.audio) { %>
+                      <div class="music-admin-audio">
+                        <audio controls preload="none">
+                          <source src="/uploads/music/<%= track.audio %>" type="audio/mpeg">
+                          Ваш браузер не підтримує audio.
+                        </audio>
+                      </div>
+                    <% } %>
+                  </div>
+                </div>
+
+                <div class="music-admin-controls">
+                  <a class="btn btn-primary" href="/admin/music/edit/<%= track.id %>">Редагувати</a>
+
+                  <form class="inline-form" method="POST" action="/admin/music/delete/<%= track.id %>" onsubmit="return confirm('Видалити цей трек?');">
+                    <button class="btn btn-danger" type="submit">Видалити</button>
+                  </form>
+                </div>
+              </article>
+            <% }) %>
+          </div>
+        <% } %>
+      </main>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Адмінка</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/assets/admin.css" />
+</head>
+<body class="admin-body">
+  <div class="admin-shell">
+    <div class="admin-topbar">
+      <div>
+        <div class="admin-brand">Admin <span>Panel</span></div>
+        <div class="admin-user">Ти увійшов як: <strong><%= user.login %></strong></div>
+      </div>
+
+      <form method="POST" action="/admin/logout">
+        <button class="btn btn-secondary" type="submit">Вийти</button>
+      </form>
+    </div>
+
+    <div class="admin-grid">
+      <aside class="admin-sidebar">
+        <nav class="admin-nav">
+          <a class="is-active" href="/admin">Головна</a>
+          <a href="/admin/news">Новини</a>
+          <a href="/admin/music">Музика</a>
+          <a href="/admin/media">Медіа</a>
+          <a href="/admin/events">Афіша</a>
+          <a href="/admin/contacts">Контакти</a>
+          <a href="/ua" target="_blank">Відкрити сайт</a>
+        </nav>
+      </aside>
+
+      <main class="admin-panel">
+        <h1 class="admin-title">Панель керування</h1>
+        <p class="admin-subtitle">Тут можна керувати новинами сайту.</p>
+
+        <div class="admin-actions">
+          <a class="btn btn-primary" href="/admin/news/create">Додати новину</a>
+          <a class="btn btn-primary" href="/admin/music/create">Додати музику</a>
+          <a class="btn btn-primary" href="/admin/media/create">Додати медіа</a>
+          <a class="btn btn-primary" href="/admin/events/create">Додати афішу</a>
+        </div>
+      </main>
+    </div>
+  </div>
+</body>
+</html>

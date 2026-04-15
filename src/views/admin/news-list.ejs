@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Новини — Адмінка</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/assets/admin.css" />
+</head>
+<body class="admin-body">
+  <div class="admin-shell">
+    <div class="admin-topbar">
+      <div>
+        <div class="admin-brand">Admin <span>Panel</span></div>
+        <div class="admin-user">Керування новинами</div>
+      </div>
+
+      <form method="POST" action="/admin/logout">
+        <button class="btn btn-secondary" type="submit">Вийти</button>
+      </form>
+    </div>
+
+    <div class="admin-grid">
+      <aside class="admin-sidebar">
+        <nav class="admin-nav">
+          <a href="/admin">Головна</a>
+          <a class="is-active" href="/admin/news">Новини</a>
+          <a href="/admin/music">Музика</a>
+          <a href="/admin/media">Медіа</a>
+          <a href="/admin/events">Афіша</a>
+          <a href="/ua" target="_blank">Відкрити сайт</a>
+        </nav>
+      </aside>
+
+      <main class="admin-panel">
+        <h1 class="admin-title">Новини</h1>
+        <p class="admin-subtitle">Створюй, редагуй і видаляй новини сайту.</p>
+
+        <div class="admin-actions">
+          <a class="btn btn-primary" href="/admin/news/create">Додати новину</a>
+          <a class="btn btn-secondary" href="/admin">Назад</a>
+        </div>
+
+        <% if (!news.length) { %>
+          <div class="admin-empty">Новин поки немає.</div>
+        <% } %>
+
+        <div class="news-admin-list">
+          <% news.forEach(item => { %>
+            <article class="news-admin-card">
+              <h3><%= item.title %></h3>
+
+              <div class="news-admin-meta">
+                <span><strong>ID:</strong> <%= item.id %></span>
+                <span><strong>Slug:</strong> <%= item.slug %></span>
+              </div>
+
+              <p><%= item.excerpt || 'Без короткого опису' %></p>
+
+              <div class="news-admin-controls">
+                <a class="btn btn-secondary" href="/<%= item.locale || 'ua' %>/news/<%= item.slug %>" target="_blank">
+                  Переглянути (<%= (item.locale || 'ua').toUpperCase() %>)
+                </a>
+                <a class="btn btn-primary" href="/admin/news/edit/<%= item.id %>">Редагувати</a>
+
+                <form class="inline-form" method="POST" action="/admin/news/delete/<%= item.id %>" onsubmit="return confirm('Точно видалити новину?');">
+                  <button class="btn btn-danger" type="submit">Видалити</button>
+                </form>
+              </div>
+            </article>
+          <% }) %>
+        </div>
+      </main>
+    </div>
+  </div>
+</body>
+</html>

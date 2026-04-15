@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Медіа</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/assets/admin.css" />
+</head>
+<body class="admin-body">
+  <div class="admin-shell">
+    <div class="admin-topbar">
+      <div>
+        <div class="admin-brand">Admin <span>Panel</span></div>
+        <div class="admin-user">Керування медіа</div>
+      </div>
+
+      <form method="POST" action="/admin/logout">
+        <button class="btn btn-secondary" type="submit">Вийти</button>
+      </form>
+    </div>
+
+    <div class="admin-grid">
+      <aside class="admin-sidebar">
+        <nav class="admin-nav">
+          <a href="/admin">Головна</a>
+          <a href="/admin/news">Новини</a>
+          <a href="/admin/music">Музика</a>
+          <a class="is-active" href="/admin/media">Медіа</a>
+          <a href="/admin/events">Афіша</a>
+          <a href="/ua" target="_blank">Відкрити сайт</a>
+        </nav>
+      </aside>
+
+      <main class="admin-panel">
+        <h1 class="admin-title">Медіа</h1>
+        <p class="admin-subtitle">Тут можна додавати, редагувати та видаляти відео.</p>
+
+        <div class="admin-actions">
+          <a class="btn btn-primary" href="/admin/media/create">Додати відео</a>
+          <a class="btn btn-secondary" href="/admin">Назад</a>
+        </div>
+
+        <% if (!mediaList || mediaList.length === 0) { %>
+          <div class="admin-empty">Поки що жодного відео не додано.</div>
+        <% } %>
+
+        <% if (mediaList && mediaList.length > 0) { %>
+          <div class="music-admin-list">
+            <% mediaList.forEach(function(item) { %>
+              <article class="music-admin-card">
+                <div class="music-admin-main">
+                  <% if (item.cover_image) { %>
+                    <div class="music-admin-cover">
+                      <img src="/uploads/media/<%= item.cover_image %>" alt="<%= item.title %>">
+                    </div>
+                  <% } else { %>
+                    <div class="music-admin-cover music-admin-cover--empty">
+                      <span>No cover</span>
+                    </div>
+                  <% } %>
+
+                  <div class="music-admin-content">
+                    <h3><%= item.title %></h3>
+
+                    <div class="music-admin-meta">
+                      <span>ID: <%= item.id %></span>
+                      <span>Категорія: <%= item.category %></span>
+                      <% if (item.created_at) { %>
+                        <span>Створено: <%= new Date(item.created_at).toLocaleDateString('uk-UA') %></span>
+                      <% } %>
+                    </div>
+
+                    <% if (item.description) { %>
+                      <p><%= item.description %></p>
+                    <% } else { %>
+                      <p class="music-admin-muted">Опис відсутній.</p>
+                    <% } %>
+
+                    <div class="music-admin-audio">
+                      <a
+                        class="btn btn-secondary"
+                        href="<%= item.youtube_url %>"
+                        target="_blank"
+                        rel="noopener"
+                      >
+                        Відкрити YouTube
+                      </a>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="music-admin-controls">
+                  <a class="btn btn-primary" href="/admin/media/edit/<%= item.id %>">Редагувати</a>
+
+                  <form class="inline-form" method="POST" action="/admin/media/delete/<%= item.id %>" onsubmit="return confirm('Видалити це відео?');">
+                    <button class="btn btn-danger" type="submit">Видалити</button>
+                  </form>
+                </div>
+              </article>
+            <% }) %>
+          </div>
+        <% } %>
+      </main>
+    </div>
+  </div>
+</body>
+</html>

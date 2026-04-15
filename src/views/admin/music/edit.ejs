@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Редагувати трек</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/assets/admin.css" />
+</head>
+<body class="admin-body">
+  <div class="admin-shell">
+    <div class="admin-topbar">
+      <div>
+        <div class="admin-brand">Admin <span>Panel</span></div>
+        <div class="admin-user">Редагування треку</div>
+      </div>
+
+      <form method="POST" action="/admin/logout">
+        <button class="btn btn-secondary" type="submit">Вийти</button>
+      </form>
+    </div>
+
+    <div class="admin-grid">
+      <aside class="admin-sidebar">
+        <nav class="admin-nav">
+          <a href="/admin">Головна</a>
+          <a href="/admin/news">Новини</a>
+          <a class="is-active" href="/admin/music">Музика</a>
+          <a href="/admin/media">Медіа</a>
+          <a href="/admin/events">Афіша</a>
+          <a href="/ua" target="_blank">Відкрити сайт</a>
+        </nav>
+      </aside>
+
+      <main class="admin-panel">
+        <h1 class="admin-title">Редагувати трек</h1>
+        <p class="admin-subtitle">Онови текст, mp3 або обкладинку.</p>
+
+        <form class="admin-form" method="POST" action="/admin/music/edit/<%= music.id %>" enctype="multipart/form-data">
+          <div class="admin-field">
+            <label for="title">Назва треку</label>
+            <input id="title" type="text" name="title" value="<%= music.title %>" required />
+          </div>
+
+          <div class="admin-field">
+            <label for="description">Опис</label>
+            <textarea id="description" name="description" rows="6"><%= music.description || '' %></textarea>
+          </div>
+
+          <div class="admin-preview-grid">
+            <div class="admin-preview-card">
+              <div class="admin-preview-label">Поточна обкладинка</div>
+
+              <% if (music.cover_image) { %>
+                <img class="admin-preview-image" src="/uploads/covers/<%= music.cover_image %>" alt="<%= music.title %>">
+              <% } else { %>
+                <div class="admin-preview-empty">Обкладинка відсутня</div>
+              <% } %>
+            </div>
+
+            <div class="admin-preview-card">
+              <div class="admin-preview-label">Поточний mp3 файл</div>
+
+              <% if (music.audio) { %>
+                <audio controls preload="none">
+                  <source src="/uploads/music/<%= music.audio %>" type="audio/mpeg">
+                  Ваш браузер не підтримує audio.
+                </audio>
+                <div class="admin-file-note"><%= music.audio %></div>
+              <% } else { %>
+                <div class="admin-preview-empty">MP3 файл відсутній</div>
+              <% } %>
+            </div>
+          </div>
+
+          <div class="admin-field">
+            <label for="audio">Новий MP3 файл</label>
+            <input id="audio" type="file" name="audio" accept=".mp3,audio/mpeg" />
+          </div>
+
+          <div class="admin-field">
+            <label for="cover_image">Нова обкладинка</label>
+            <input id="cover_image" type="file" name="cover_image" accept=".jpg,.jpeg,.png,.webp" />
+          </div>
+          <div class="admin-field">
+            <label for="category">Категорія</label>
+            <select id="category" name="category">
+                <option value="own-songs" <%= music.category === 'own-songs' ? 'selected' : '' %>>Авторські пісні</option>
+                <option value="x-factor" <%= music.category === 'x-factor' ? 'selected' : '' %>>Х-фактор</option>
+                <option value="rock" <%= music.category === 'rock' ? 'selected' : '' %>>Rock Symphony</option>
+            </select>
+            </div>
+          <div class="admin-actions">
+            <button class="btn btn-primary" type="submit">Оновити</button>
+            <a class="btn btn-secondary" href="/admin/music">Скасувати</a>
+          </div>
+        </form>
+      </main>
+    </div>
+  </div>
+</body>
+</html>

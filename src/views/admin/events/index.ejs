@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Афіша</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/assets/admin.css" />
+</head>
+<body class="admin-body">
+  <div class="admin-shell">
+    <div class="admin-topbar">
+      <div>
+        <div class="admin-brand">Admin <span>Panel</span></div>
+        <div class="admin-user">Керування афішею</div>
+      </div>
+
+      <form method="POST" action="/admin/logout">
+        <button class="btn btn-secondary" type="submit">Вийти</button>
+      </form>
+    </div>
+
+    <div class="admin-grid">
+      <aside class="admin-sidebar">
+        <nav class="admin-nav">
+          <a href="/admin">Головна</a>
+          <a href="/admin/news">Новини</a>
+          <a href="/admin/music">Музика</a>
+          <a href="/admin/media">Медіа</a>
+          <a class="is-active" href="/admin/events">Афіша</a>
+          <a href="/ua" target="_blank">Відкрити сайт</a>
+        </nav>
+      </aside>
+
+      <main class="admin-panel">
+        <h1 class="admin-title">Афіша</h1>
+        <p class="admin-subtitle">Тут можна додавати, редагувати та видаляти події.</p>
+
+        <div class="admin-actions">
+          <a class="btn btn-primary" href="/admin/events/create">Додати подію</a>
+          <a class="btn btn-secondary" href="/admin">Назад</a>
+        </div>
+
+        <% if (!eventList || eventList.length === 0) { %>
+          <div class="admin-empty">Поки що подій не додано.</div>
+        <% } %>
+
+        <% if (eventList && eventList.length > 0) { %>
+          <div class="news-admin-list">
+            <% eventList.forEach(function(event) { %>
+              <article class="news-admin-card">
+                <h3><%= event.title %></h3>
+
+                <div class="news-admin-meta">
+                  <% if (event.date) { %>
+                    <span>Дата: <%= new Date(event.date).toLocaleDateString('uk-UA') %></span>
+                  <% } %>
+
+                  <% if (event.time) { %>
+                    <span>Час: <%= event.time %></span>
+                  <% } %>
+
+                  <% if (event.city) { %>
+                    <span>Місто: <%= event.city %></span>
+                  <% } %>
+
+                  <% if (event.place) { %>
+                    <span>Місце: <%= event.place %></span>
+                  <% } %>
+                </div>
+
+                <% if (event.description) { %>
+                  <p><%= event.description %></p>
+                <% } else { %>
+                  <p class="music-admin-muted">Опис відсутній.</p>
+                <% } %>
+
+                <div class="news-admin-controls">
+                  <a class="btn btn-primary" href="/admin/events/edit/<%= event.id %>">Редагувати</a>
+
+                  <% if (event.ticket_link) { %>
+                    <a class="btn btn-secondary" href="<%= event.ticket_link %>" target="_blank" rel="noopener">Квитки</a>
+                  <% } %>
+
+                  <form class="inline-form" method="POST" action="/admin/events/delete/<%= event.id %>" onsubmit="return confirm('Видалити цю подію?');">
+                    <button class="btn btn-danger" type="submit">Видалити</button>
+                  </form>
+                </div>
+              </article>
+            <% }) %>
+          </div>
+        <% } %>
+      </main>
+    </div>
+  </div>
+</body>
+</html>

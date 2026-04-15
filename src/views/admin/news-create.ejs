@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Створити новину</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/assets/admin.css" />
+</head>
+<body class="admin-body">
+  <div class="admin-shell">
+    <div class="admin-topbar">
+      <div>
+        <div class="admin-brand">Admin <span>Panel</span></div>
+        <div class="admin-user">Створення новини</div>
+      </div>
+
+      <form method="POST" action="/admin/logout">
+        <button class="btn btn-secondary" type="submit">Вийти</button>
+      </form>
+    </div>
+
+    <div class="admin-grid">
+      <aside class="admin-sidebar">
+        <nav class="admin-nav">
+          <a href="/admin">Головна</a>
+          <a class="is-active" href="/admin/news">Новини</a>
+          <a href="/admin/music">Музика</a>
+          <a href="/admin/media">Медіа</a>
+          <a href="/admin/events">Афіша</a>
+          <a href="/ua" target="_blank">Відкрити сайт</a>
+      </aside>
+
+      <main class="admin-panel">
+        <h1 class="admin-title">Створити новину</h1>
+        <p class="admin-subtitle">Заповни поля нижче.</p>
+
+        <% if (error) { %>
+          <div class="admin-error"><%= error %></div>
+        <% } %>
+
+        <form class="admin-form" method="POST" action="/admin/news/create" enctype="multipart/form-data">
+          <div class="admin-field">
+            <label for="title">Title</label>
+            <input id="title" type="text" name="title" value="<%= formData.title %>" />
+          </div>
+
+          <div class="admin-field">
+            <label for="slug">Slug</label>
+            <input id="slug" type="text" name="slug" value="<%= formData.slug %>" />
+          </div>
+
+          <div class="admin-field">
+            <label for="excerpt">Excerpt</label>
+            <textarea id="excerpt" name="excerpt" rows="4"><%= formData.excerpt %></textarea>
+          </div>
+
+          <div class="admin-field">
+            <label for="content">Content</label>
+            <textarea id="content" name="content" rows="10"><%= formData.content %></textarea>
+          </div>
+
+        <div class="admin-field">
+          <label for="locale">Мова сторінки</label>
+          <select id="locale" name="locale">
+            <option value="ua" <%= formData.locale === 'ua' ? 'selected' : '' %>>Українська</option>
+            <option value="en" <%= formData.locale === 'en' ? 'selected' : '' %>>English</option>
+          </select>
+        </div>
+
+        <div class="admin-field">
+          <label for="image">Image path</label>
+          <input id="image" type="text" name="image" placeholder="/images/news/test.jpg" value="<%= formData.image %>" />
+        </div>
+
+        <div class="admin-field">
+          <label for="imageFile">Або завантажити файл</label>
+          <input id="imageFile" type="file" name="imageFile" accept=".jpg,.jpeg,.png,.webp" />
+        </div>
+
+          <div class="admin-actions">
+            <button class="btn btn-primary" type="submit">Зберегти</button>
+            <a class="btn btn-secondary" href="/admin/news">Скасувати</a>
+          </div>
+        </form>
+      </main>
+    </div>
+  </div>
+
+  <script>
+    const titleInput = document.getElementById('title');
+    const slugInput = document.getElementById('slug');
+
+    function transliterate(text) {
+      const map = {
+        'а':'a','б':'b','в':'v','г':'h','ґ':'g','д':'d','е':'e','є':'ye','ж':'zh','з':'z','и':'y','і':'i','ї':'yi','й':'y',
+        'к':'k','л':'l','м':'m','н':'n','о':'o','п':'p','р':'r','с':'s','т':'t','у':'u','ф':'f','х':'kh','ц':'ts','ч':'ch',
+        'ш':'sh','щ':'shch','ь':'','ю':'yu','я':'ya',
+        'ы':'y','э':'e','ъ':''
+      };
+
+      return text
+        .toLowerCase()
+        .split('')
+        .map(char => map[char] !== undefined ? map[char] : char)
+        .join('');
+    }
+
+    let slugTouched = !!slugInput.value.trim();
+
+    slugInput.addEventListener('input', () => {
+      slugTouched = slugInput.value.trim().length > 0;
+    });
+
+    titleInput.addEventListener('input', () => {
+      if (slugTouched) return;
+
+      const slug = transliterate(titleInput.value)
+        .replace(/[^a-z0-9\s-]/g, '')
+        .trim()
+        .replace(/\s+/g, '-')
+        .replace(/-+/g, '-')
+        .replace(/^-|-$/g, '');
+
+      slugInput.value = slug;
+    });
+  </script>
+</body>
+</html>
