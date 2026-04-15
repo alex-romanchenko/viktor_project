@@ -1,3 +1,7 @@
 const app = require('./src/server');
 
-module.exports = app;
+const PORT = process.env.PORT || 3000;
+
+app.listen(PORT, '127.0.0.1', () => {
+  console.log(`App started on port ${PORT}`);
+});

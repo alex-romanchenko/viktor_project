@@ -44,18 +44,12 @@ app.use((req, res, next) => {
   res.locals.user = req.session.user || null;
   next();
 });
+
 app.get('/health', (req, res) => {
   res.status(200).send('ok');
 });
+
 app.use('/', publicRoutes);
 app.use('/admin', adminRoutes);
-
-const PORT = process.env.PORT || 3000;
-
-if (require.main === module) {
-  app.listen(PORT, () => {
-    console.log(`Server started: http://localhost:${PORT}`);
-  });
-}
 
 module.exports = app;
