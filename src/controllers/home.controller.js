@@ -27,21 +27,10 @@ function getYoutubeEmbed(url) {
 
 async function showHomePage(req, res) {
   try {
-    console.log('HOME: start');
-
-    console.log('HOME: news');
-    const allNews = await newsModel.getAllNews();
-
-    console.log('HOME: music');
+    const allNews = await newsModel.getAllNewsByLocale('ua');
     const allMusic = await musicModel.getAllMusic();
-
-    console.log('HOME: media');
     const allMedia = await mediaModel.getAllMedia();
-
-    console.log('HOME: events');
     const allEvents = await eventModel.getAllEvents();
-
-    console.log('HOME: contacts');
     const contacts = await contactModel.getContacts();
 
     const latestNews = allNews.slice(0, 3);
@@ -54,7 +43,6 @@ async function showHomePage(req, res) {
       embedUrl: getYoutubeEmbed(item.youtube_url)
     }));
 
-    console.log('HOME: render');
     res.render('ua/index', {
       latestNews,
       latestTracks,
@@ -70,7 +58,7 @@ async function showHomePage(req, res) {
 
 async function showHomePageEn(req, res) {
   try {
-    const allNews = await newsModel.getAllNews();
+    const allNews = await newsModel.getAllNewsByLocale('en');
     const allMusic = await musicModel.getAllMusic();
     const allMedia = await mediaModel.getAllMedia();
     const allEvents = await eventModel.getAllEvents();

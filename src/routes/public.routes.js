@@ -41,9 +41,8 @@ router.get('/en/bio', (req, res) => {
   res.render('en/bio');
 });
 
-router.get('/en/music', (req, res) => {
-  res.render('en/music');
-});
+router.get('/en/music', musicController.showMusicPageEn);
+router.get('/en/music/', musicController.showMusicPageEn);
 
 router.get('/en/media', mediaController.showMediaPageEn);
 router.get('/en/media/', mediaController.showMediaPageEn);
